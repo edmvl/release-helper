@@ -8,16 +8,25 @@
         <tr>
             <th id="mr-number">№ тикета</th>
             <th id="mr-url">Ссылка на МР</th>
+            <th id="mr-url">Ветка</th>
             <th id="mr-status">Статус</th>
         </tr>
         </thead>
         <tbody>
             #foreach($mergeRequest in $mergeRequests)
             <tr>
-                <td headers="mr-number"><a href="$host/browse/$mergeRequest.number" target="_blank">$mergeRequest.number</a></td>
+                <td headers="mr-number"><a href="$host/browse/$mergeRequest.number"
+                                           target="_blank">$mergeRequest.number</a></td>
                 <td headers="mr-url">
                     #if( $mergeRequest.url != "null" )
                         <a href="$mergeRequest.url" target="_blank">$mergeRequest.url</a>
+                    #else
+                        Не указана ссылка
+                    #end
+                </td>
+                <td headers="mr-url">
+                    #if( $mergeRequest.branch != "null" )
+                        $mergeRequest.branch
                     #else
                         Не указана ссылка
                     #end
@@ -33,4 +42,17 @@
             #end
         </tbody>
     </table>
+    <div class="aui-tabs horizontal-tabs">
+        <div class="tabs-pane active-pane" id="common-settings-tab">
+            <div class="buttons-container form-footer">
+                <button
+                        class="aui-button aui-button-primary"
+                        id="config-save"
+                        onclick="mergeBranches()"
+                >
+                    Смержить ветки
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

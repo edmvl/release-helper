@@ -8,20 +8,21 @@ import com.atlassian.jira.plugin.webfragment.contextproviders.AbstractJiraContex
 import com.atlassian.jira.plugin.webfragment.model.JiraHelper;
 import com.atlassian.jira.user.ApplicationUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.ComponentScan;
 import ru.zhendozzz.jira.dto.TicketDto;
+import ru.zhendozzz.jira.service.gitlab.GitlabService;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@ComponentScan
 @Slf4j
 public class ModelProvider extends AbstractJiraContextProvider {
 
     private final IssueLinkManager issueLinkManager;
+    private final GitlabService gitlabService;
 
-    public ModelProvider(IssueLinkManager issueLinkManager) {
-        this.issueLinkManager = issueLinkManager;
+    public ModelProvider(GitlabService gitlabService) {
+        this.issueLinkManager = ComponentAccessor.getIssueLinkManager();
+        this.gitlabService = gitlabService;
     }
 
     @Override
@@ -46,19 +47,24 @@ public class ModelProvider extends AbstractJiraContextProvider {
         Issue destinationObject = issueLink.getDestinationObject();
         Object customFieldValue = destinationObject.getCustomFieldValue(
                 //TODO: вынести в настройки плагина
-                ComponentAccessor.getCustomFieldManager().getCustomFieldObject("customfield_10001")
+                ComponentAccessor.getCustomFieldManager().getCustomFieldObject("customfield_10000")
         );
         String url = String.valueOf(customFieldValue);
+        String branchName = gitlabService.getBranchName(url);
         return TicketDto.builder()
                 .url(url)
                 .number(destinationObject.getKey())
-                .status(getStatus(url))
+                .branch(branchName)
+                .status(getStatus(url, branchName))
                 .build();
     }
 
-    private String getStatus(String url) {
+    private String getStatus(String url, String branchName) {
         if (url.equals("null")) {
             return "Не указана ссылка на МР";
+        }
+        if (Objects.isNull(branchName)) {
+            return "Не удалось получить ветку из МР";
         }
         return "Ok";
     }

@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class TicketDto {
     private String url;
     private String number;
+    private String branch;
     private String status;
 }
