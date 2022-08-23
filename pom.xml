@@ -85,6 +85,12 @@
             <version>2.6</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.atlassian.activeobjects</groupId>
+            <artifactId>activeobjects-plugin</artifactId>
+            <version>${ao.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -105,6 +111,7 @@
         <jira.version>8.13.0</jira.version>
         <amps.version>8.1.2</amps.version>
         <atlassian.spring.scanner.version>2.1.7</atlassian.spring.scanner.version>
+        <ao.version>3.3.0</ao.version>
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>

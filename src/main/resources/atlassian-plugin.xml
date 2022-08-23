@@ -28,4 +28,28 @@
   <rest name="Release Controller" i18n-name-key="release-controller.name" key="release-controller" path="release" version="1.0">
     <description key="release-controller.description">The Release Controller Plugin</description> 
   </rest>
+  <component-import key="ao" interface="com.atlassian.activeobjects.external.ActiveObjects"/>
+  <ao key="ao-module">
+    <entity>ru.zhendozzz.jira.ao.Config</entity>
+  </ao>
+  <component key="release-helper-config-service" class="ru.zhendozzz.jira.service.config.PluginConfigService" public="true">
+    <interface>com.atlassian.sal.api.lifecycle.LifecycleAware</interface>
+  </component>
+  <webwork1 key="worklog-config-webwork" name="Config webwork" class="java.lang.Object">
+    <description>Configure worklog settings</description>
+    <actions>
+      <action name="ru.zhendozzz.jira.action.ConfigAction"
+              alias="release-helper-config" roles-required="admin">
+        <view name="input">/templates/config/release-helper-config.vm</view>
+      </action>
+    </actions>
+  </webwork1>
+  <web-section key="configure_fields_visibility_section" location="admin_issues_menu"
+               name="Configure fields visibility section"/>
+  <web-item key="configure_fields_visibility_section_link"
+            section="admin_issues_menu/configure_fields_visibility_section" name="Configure fields visibility link"
+            weight="800">
+    <label key="release-helper.configure.manage.screen.label"/>
+    <link linkId="configure_fields_visibility_link">/secure/release-helper-config!input.jspa</link>
+  </web-item>
 </atlassian-plugin>
